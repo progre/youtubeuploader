@@ -57,7 +57,7 @@ Promise.all([
             }
         });
     });
-    uploader.on('complete', (title:string) => {
+    uploader.on('complete', (title: string) => {
         tray.displayBalloon({
             title: 'YouTube Auto Uploader',
             content: 'アップロードが完了しました: ' + title

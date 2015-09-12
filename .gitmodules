@@ -3,4 +3,4 @@
 	url = https://github.com/progre/gulpfiles.git
 [submodule "typings/DefinitelyTyped"]
 	path = typings/DefinitelyTyped
-	url = https://github.com/borisyankov/DefinitelyTyped
+	url = https://github.com/progre/DefinitelyTyped
