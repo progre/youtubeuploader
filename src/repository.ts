@@ -7,7 +7,7 @@ export default class Repository {
 
     load() {
         return new Promise<Config>((resolve, reject) => {
-            fs.readFile(this.configPath, 'ascii', (err, data) => {
+            fs.readFile(this.configPath, 'utf8', (err, data) => {
                 if (err != null) {
                     resolve(<any>{});
                     return;

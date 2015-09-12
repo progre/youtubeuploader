@@ -38,7 +38,13 @@ Promise.all([
     let uploader = new Uploader(repos);
     tray = createTray(app, uploader);
 
-    uploader.on('uploadfailed', (e: any) => {
+    uploader.on('start', (title: string) => {
+        tray.displayBalloon({
+            title: 'YouTube Auto Uploader',
+            content: 'アップロードを開始しました: ' + title
+        });
+    });
+    uploader.on('failed', (e: any) => {
         if (e.code == null || e.code !== 401) {
             console.error(e);
             return;
@@ -50,7 +56,12 @@ Promise.all([
                 uploader.authenticate();
             }
         });
-        return;
+    });
+    uploader.on('complete', (title:string) => {
+        tray.displayBalloon({
+            title: 'YouTube Auto Uploader',
+            content: 'アップロードが完了しました: ' + title
+        });
     });
     chokidar.watch(config.watchPath)
         .on('change', (path: string) => {

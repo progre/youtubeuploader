@@ -54,7 +54,7 @@ export default class Uploader extends EventEmitter {
         this.working = true;
         this.uploadRecursive()
             .catch(e => {
-                super.emit('uploadfailed', e);
+                super.emit('failed', e);
             })
             .then(() => {
                 log4js.getLogger().info('stop upload task');
@@ -67,7 +67,7 @@ export default class Uploader extends EventEmitter {
             return Promise.resolve();
         }
         return this.upload(this.list[0])
-            .then(x => {
+            .then(() => {
                 this.list.shift();
                 return this.uploadRecursive();
             });
@@ -93,8 +93,13 @@ export default class Uploader extends EventEmitter {
             }),
             this.repository.load()
         ]).then(obj => {
-            return upload(filePath, obj[1], obj[0]);
-        }).then((data: any) => new Promise((resolve, reject) => {
+            let config: Config = obj[1];
+            let stats: fs.Stats = obj[0];
+            let t = title(config.name, stats);
+            super.emit('start', t);
+            return Promise.all([upload(filePath, config, stats), Promise.resolve(t)]);
+        }).then((obj: any[]) => new Promise((resolve, reject) => {
+            super.emit('complete', obj[1]);
             log4js.getLogger().error('upload succeeded: ' + filePath);
             trash([filePath], (err: any) => {
                 if (err != null) {
@@ -102,7 +107,7 @@ export default class Uploader extends EventEmitter {
                     return;
                 }
                 log4js.getLogger().error('move to trash box: ' + filePath);
-                resolve(data);
+                resolve();
             });
         })).catch(e => {
             log4js.getLogger().error('upload failed: ' + filePath);
@@ -112,7 +117,7 @@ export default class Uploader extends EventEmitter {
 }
 
 function upload(filePath: string, config: Config, stats: fs.Stats) {
-    return new Promise((resolve, reject) => {
+    return new Promise<any>((resolve, reject) => {
         youtubeAPI.videos.insert(
             {
                 part: 'snippet,status',
@@ -141,11 +146,11 @@ function upload(filePath: string, config: Config, stats: fs.Stats) {
 }
 
 function title(name: string, stats: fs.Stats) {
-    return `${name} ${toString(stats.ctime) }`;
+    return `${name} ${toString(stats.birthtime) }`;
 }
 
 function description(stats: fs.Stats) {
-    return `配信開始: ${toString(stats.ctime) }` + '\n'
+    return `配信開始: ${toString(stats.birthtime) }` + '\n'
         + `配信終了: ${toString(stats.mtime) }`;
 }
 
