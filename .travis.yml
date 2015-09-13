@@ -1,0 +1,32 @@
+language: node_js
+node_js: 4.0.0
+env:
+  APP_NAME=youtubeautouploader
+before_script:
+  - npm install -g gulp
+before_deploy:
+  - npm install -g electron-packager
+  - mkdir dest
+  - cp -r lib/ dest/lib
+  - cp LICENSE dest/
+  - cp package.json dest/
+  - cp README.md dest/
+  - echo $SECRET_JSON >> dest/lib/secret.json
+  - cd dest
+  - npm install --production
+  - cd ..
+  - electron-packager dest $APP_NAME --platform=darwin,win32 --arch=x64 --version=0.32.2
+  - electron-packager dest $APP_NAME --platform=win32 --arch=ia32 --version=0.32.2
+  - zip -ry $APP_NAME-win32-ia32.zip $APP_NAME-win32-ia32
+  - zip -ry $APP_NAME-win32-x64.zip $APP_NAME-win32-x64
+  - zip -ry $APP_NAME-darwin-x64.zip $APP_NAME-darwin-x64
+deploy:
+  provider: releases
+  api_key:
+    secure: $API_KEY
+  file:
+    - $APP_NAME-win32-ia32.zip
+    - $APP_NAME-win32-x64.zip
+    - $APP_NAME-darwin-x64.zip
+  on:
+    tags: true

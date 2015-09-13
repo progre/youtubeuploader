@@ -19,8 +19,8 @@ gulp.task('build', ['clean'], function (callback) {
     runSequence('copy', 'jade', 'stylus', 'ts', callback);
 });
 
-gulp.task('clean', function (callback) {
-    del('lib/', callback);
+gulp.task('clean', function () {
+    return del('lib/');
 });
 
 gulp.task('copy', function (callback) {
