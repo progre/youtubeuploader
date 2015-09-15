@@ -1,0 +1,76 @@
+import * as log4js from 'log4js';
+import {v4 as uuid} from 'node-uuid';
+let app = require('app');
+let BrowserWindow = require('browser-window');
+let ipc = require('ipc');
+import {create as createTray} from './tray';
+import Uploader from './uploader';
+import Repository from './repository';
+import {Config} from './interfaces';
+import Watcher from './watcher';
+
+export default class Application {
+    private watcher = new Watcher();
+    private repos = new Repository(app.getPath('userData') + '/config.json');
+    private uploader: Uploader;
+    private hiddenWindow: any;
+
+    constructor() {
+        this.uploader = new Uploader(this.repos); // TODO: 定義順でなんとかなるならインラインでやればええやん
+        this.watcher.on('change', (path: string) => {
+            log4js.getLogger().info('File changed: ' + path);
+            this.uploader.queue(path);
+        });
+    }
+
+    static new() {
+        let thiz = new Application();
+        app.setName(app.getName() + '{' + uuid() + '}');
+
+        return Promise.all([
+            thiz.repos.load(),
+            new Promise((resolve, reject) => app.on('ready', resolve))
+        ]).then(obj => {
+            let config = obj[0];
+            thiz.hiddenWindow = new BrowserWindow({ width: 0, height: 0, show: false });
+            ipc.on('load', (event: any) => {
+                thiz.repos.load().then(config => {
+                    event.sender.send('data', config);
+                });
+            });
+            ipc.on('save', (event: any, data: Config) => {
+                thiz.repos.save(data);
+                thiz.watcher.watch(data.watchPath);
+            });
+            let tray = createTray(app, thiz.uploader);
+
+            thiz.uploader.on('start', (title: string) => {
+                tray.displayBalloon({
+                    title: 'YouTube Auto Uploader',
+                    content: 'アップロードを開始しました: ' + title
+                });
+            });
+            thiz.uploader.on('failed', (e: any) => {
+                if (e.code == null || e.code !== 401) {
+                    console.error(e);
+                    return;
+                }
+                tray.displayBalloon({
+                    title: 'YouTube Auto Uploader',
+                    content: '認証情報を入力してください',
+                    clicked: () => {
+                        thiz.uploader.authenticate();
+                    }
+                });
+            });
+            thiz.uploader.on('complete', (title: string) => {
+                tray.displayBalloon({
+                    title: 'YouTube Auto Uploader',
+                    content: 'アップロードが完了しました: ' + title
+                });
+            });
+            thiz.watcher.watch(config.watchPath);
+            return thiz;
+        });
+    }
+}

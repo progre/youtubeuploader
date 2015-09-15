@@ -1,12 +1,25 @@
 doctype html
 meta(charset='utf-8')
-title Hello world
-meta(name='description', content='Hello world')
-meta(name='keywords', content='hello,world')
-meta(name='viewport',
-  content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no')
-link(rel='stylesheet' href='style/style.css')
-body
-  | Hello world!
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/EventEmitter/4.2.11/EventEmitter.min.js')
-  script(src='script/main.js')
+title YouTube Auto Uploader
+meta(name='viewport', content='width=device-width, initial-scale=1')
+link(rel='stylesheet' href='style/bootstrap.min.css')
+.container-fluid.p-a
+  form
+    .form-group.row
+      label.col-xs-3.form-control-label.text-right(for='channelName') チャンネル名:
+      .col-xs-9
+        input.form-control#channelName(type='text', placeholder='チャンネル名', required, disabled)
+    .form-group.row
+      label.col-xs-3.form-control-label.text-right(for='watchPath') 配信の保存パス:
+      .col-xs-9
+        input.form-control#watchPath(type='text', placeholder='C:¥...', disabled)
+    .form-group.row
+      label.col-xs-3.form-control-label.text-right(for='tags') タグ:
+      .col-xs-9
+        input.form-control#tags(type='text', placeholder='A, B, C, ...', disabled)
+  .text-right.m-t-md
+    button.btn.btn-primary-outline(type='button', onClick='window.close();') 閉じる
+script.
+  window.$ = window.jQuery = require("./script/jquery.min.js"); // Load jQuery.
+script(src='script/bootstrap.min.js')
+script(src='script/main.js')

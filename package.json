@@ -1,10 +1,10 @@
 {
-  "name": "youtubeuploader",
-  "version": "0.0.0",
-  "description": "",
+  "name": "youtube-auto-uploader",
+  "version": "0.1.0",
+  "description": "Upload your video when the recording is finished.",
   "main": "lib/index.js",
   "scripts": {
-    "test": "gulp build-and-test"
+    "test": "gulp release-build-and-test"
   },
   "repository": {
     "type": "git",
@@ -46,6 +46,7 @@
     "electron-google-oauth": "^1.1.0",
     "lockfile": "^1.0.1",
     "log4js": "^0.6.26",
+    "node-uuid": "^1.4.3",
     "source-map-support": "^0.3.2",
     "trash": "^2.0.0",
     "youtube-api": "^1.0.1"

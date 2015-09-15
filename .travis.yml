@@ -17,9 +17,9 @@ before_deploy:
   - cd ..
   - electron-packager dest $APP_NAME --platform=darwin,win32 --arch=x64 --version=0.32.2
   - electron-packager dest $APP_NAME --platform=win32 --arch=ia32 --version=0.32.2
-  - zip -ry $APP_NAME-win32-ia32.zip $APP_NAME-win32-ia32
-  - zip -ry $APP_NAME-win32-x64.zip $APP_NAME-win32-x64
-  - zip -ry $APP_NAME-darwin-x64.zip $APP_NAME-darwin-x64
+  - zip -qry $APP_NAME-win32-ia32.zip $APP_NAME-win32-ia32
+  - zip -qry $APP_NAME-win32-x64.zip $APP_NAME-win32-x64
+  - zip -qry $APP_NAME-darwin-x64.zip $APP_NAME-darwin-x64
 deploy:
   provider: releases
   api_key:

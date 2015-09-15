@@ -33,7 +33,7 @@
     "no-construct": true,
     "no-debugger": true,
     "no-duplicate-key": true,
-    "no-shadowed-variable": true,
+    "no-shadowed-variable": false,
     "no-duplicate-variable": true,
     "no-empty": true,
     "no-eval": true,

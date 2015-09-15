@@ -6,7 +6,7 @@ let trash = require('trash');
 let BrowserWindow = require('browser-window');
 let youtubeAPI = require('youtube-api');
 let googleOAuth = require('electron-google-oauth')(BrowserWindow);
-let secret = require('./secret.json');
+let secret = require('../secret.json');
 import Repository from './repository';
 import {Config} from './interfaces';
 
