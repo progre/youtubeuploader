@@ -6,9 +6,14 @@ let trash = require('trash');
 let BrowserWindow = require('browser-window');
 let youtubeAPI = require('youtube-api');
 let googleOAuth = require('electron-google-oauth')(BrowserWindow);
-let secret = require('../secret.json');
 import Repository from './repository';
 import {Config} from './interfaces';
+
+let secret = {
+    clientId:
+    'ISAMIDY+AXwiMxpjODcFMHEyLycgJkEXI0M3LiMxJjtoGyQ3ZwpZIS5YRi8xBjo8IjclLzYGUjoyRiUjOlgkJygrahcwHBI8NzUwIiI1ICYgMGAwJRYUIDUNDUI1AkAE',
+    clientSecret: 'IAIlEiA5RU80OQVRJxsSE2MfFhEqOxk2LxgCOjEUWF4='
+};
 
 interface AccessToken {
     access_token: string;
@@ -16,6 +21,9 @@ interface AccessToken {
     expires_in: number;
     refresh_token: string;
 }
+
+secret.clientId = sutalize(secret.clientId);
+secret.clientSecret = sutalize(secret.clientSecret);
 
 export default class Uploader extends EventEmitter {
     private list: string[] = [];
@@ -163,3 +171,16 @@ function toString(date: Date) {
 function doubleDigits(num: number) {
     return ('0' + num).slice(-2);
 }
+
+function sutalize(src: string) {
+    let srcBuffer = new Buffer(src, 'base64');
+    let dst = '';
+    let sutachu = 'sutachu-san maji sutasuta';
+    for (let i = 0; i < srcBuffer.length; i++) {
+        dst += String.fromCharCode(srcBuffer.readInt8(i) ^ sutachu.charCodeAt(i % sutachu.length));
+    }
+    return dst;
+}
+
+secret.clientId = sutalize(secret.clientId);
+secret.clientSecret = sutalize(secret.clientSecret);
