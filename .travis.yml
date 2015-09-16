@@ -1,7 +1,7 @@
 language: node_js
 node_js: 4.0.0
 env:
-  APP_NAME=youtubeautouploader
+  APP_NAME=youtubeuploader
 before_script:
   - npm install -g gulp
 before_deploy:
