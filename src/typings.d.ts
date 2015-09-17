@@ -1,4 +1,4 @@
-/// <reference path="../node_modules/typescript/bin/lib.es6.d.ts" />
+/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
 /// <reference path="../typings/DefinitelyTyped/node/node.d.ts" />
 /// <reference path="../typings/DefinitelyTyped/chokidar/chokidar.d.ts" />
 /// <reference path="../typings/DefinitelyTyped/lockfile/lockfile.d.ts" />
