@@ -26,6 +26,11 @@ export default class Application {
     static new() {
         let thiz = new Application();
         app.setName(app.getName() + '{' + uuid() + '}');
+        switch (process.platform) {
+            case 'darwin':
+                app.dock.hide();
+                break;
+        }
 
         return Promise.all([
             thiz.repos.load(),
