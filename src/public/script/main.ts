@@ -2,7 +2,7 @@
 declare let require: any;
 let erequire = require;
 let ipc = erequire('ipc');
-import {Config} from '../../server/interfaces';
+import {Config} from '../../service/interfaces';
 
 ipc.on('data', (data: Config) => {
     $('#channelName').val(data.name).removeAttr('disabled');

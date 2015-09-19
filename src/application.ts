@@ -3,11 +3,11 @@ import {v4 as uuid} from 'node-uuid';
 let app = require('app');
 let BrowserWindow = require('browser-window');
 let ipc = require('ipc');
-import AppTray from './apptray';
-import Uploader from './uploader';
-import Repository from './repository';
-import {Config} from './interfaces';
-import Watcher from './watcher';
+import Uploader from './service/uploader';
+import Repository from './service/repository';
+import {Config} from './service/interfaces';
+import AppTray from './ui/apptray';
+import Watcher from './ui/watcher';
 
 export default class Application {
     private watcher = new Watcher();

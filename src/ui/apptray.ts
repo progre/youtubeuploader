@@ -1,4 +1,4 @@
-import Uploader from './uploader';
+import Uploader from '../service/uploader';
 import * as path from 'path';
 let TrayBase = require('tray');
 let Menu = require('menu');

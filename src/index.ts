@@ -2,6 +2,6 @@
 'use strict';
 require('source-map-support').install();
 require('crash-reporter').start();
-import Application from './server/application';
+import Application from './application';
 
 Application.new();
