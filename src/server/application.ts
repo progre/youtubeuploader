@@ -3,7 +3,7 @@ import {v4 as uuid} from 'node-uuid';
 let app = require('app');
 let BrowserWindow = require('browser-window');
 let ipc = require('ipc');
-import {create as createTray} from './tray';
+import AppTray from './apptray';
 import Uploader from './uploader';
 import Repository from './repository';
 import {Config} from './interfaces';
@@ -30,6 +30,8 @@ export default class Application {
             case 'darwin':
                 app.dock.hide();
                 break;
+            default:
+                break;
         }
 
         return Promise.all([
@@ -47,10 +49,10 @@ export default class Application {
                 thiz.repos.save(data);
                 thiz.watcher.watch(data.watchPath);
             });
-            let tray = createTray(app, thiz.uploader);
+            let appTray = new AppTray(app, thiz.uploader);
 
             thiz.uploader.on('start', (title: string) => {
-                tray.displayBalloon({
+                appTray.tray.displayBalloon({
                     title: 'YouTube Auto Uploader',
                     content: 'アップロードを開始しました: ' + title
                 });
@@ -60,7 +62,7 @@ export default class Application {
                     console.error(e);
                     return;
                 }
-                tray.displayBalloon({
+                appTray.tray.displayBalloon({
                     title: 'YouTube Auto Uploader',
                     content: '認証情報を入力してください',
                     clicked: () => {
@@ -69,7 +71,7 @@ export default class Application {
                 });
             });
             thiz.uploader.on('complete', (title: string) => {
-                tray.displayBalloon({
+                appTray.tray.displayBalloon({
                     title: 'YouTube Auto Uploader',
                     content: 'アップロードが完了しました: ' + title
                 });
