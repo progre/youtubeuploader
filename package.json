@@ -47,6 +47,7 @@
     "electron-google-oauth": "^1.1.0",
     "lockfile": "^1.0.1",
     "log4js": "^0.6.26",
+    "node-notifier": "^4.2.3",
     "node-uuid": "^1.4.3",
     "source-map-support": "^0.3.2",
     "trash": "^2.0.0",

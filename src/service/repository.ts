@@ -25,7 +25,6 @@ export default class Repository {
 
     save(data: Config) {
         return new Promise((resolve, reject) => {
-            console.log(this.configPath);
             fs.writeFile(this.configPath, JSON.stringify(data), err => {
                 if (err != null) {
                     reject(err);

@@ -1,4 +1,3 @@
-import * as log4js from 'log4js';
 import {v4 as uuid} from 'node-uuid';
 let app = require('app');
 let BrowserWindow = require('browser-window');
@@ -8,23 +7,31 @@ import Repository from './service/repository';
 import {Config} from './service/interfaces';
 import AppTray from './ui/apptray';
 import Watcher from './ui/watcher';
+import Notifier from './ui/notifier';
 
 export default class Application {
-    private watcher = new Watcher();
     private repos = new Repository(app.getPath('userData') + '/config.json');
-    private uploader: Uploader;
+    private uploader = new Uploader(this.repos);
+    private watcher = new Watcher(this.uploader);
+    /* tslint:disable:no-unused-variable */
+    private notifier = new Notifier(this.uploader);
+    /* tslint:enable:no-unused-variable */
     private hiddenWindow: any;
+    private appTray: AppTray;
 
     constructor() {
-        this.uploader = new Uploader(this.repos); // TODO: 定義順でなんとかなるならインラインでやればええやん
-        this.watcher.on('change', (path: string) => {
-            log4js.getLogger().info('File changed: ' + path);
-            this.uploader.queue(path);
+        ipc.on('load', (event: any) => {
+            this.repos.load().then(config => {
+                event.sender.send('data', config);
+            });
+        });
+        ipc.on('save', (event: any, data: Config) => {
+            this.repos.save(data);
+            this.watcher.watch(data.watchPath);
         });
     }
 
     static new() {
-        let thiz = new Application();
         app.setName(app.getName() + '{' + uuid() + '}');
         switch (process.platform) {
             case 'darwin':
@@ -33,51 +40,17 @@ export default class Application {
             default:
                 break;
         }
-
-        return Promise.all([
-            thiz.repos.load(),
+        let thiz = new Application();
+        return Promise.all<{}>([
+            thiz.repos.load()
+                .then(config => thiz.watcher.watch(config.watchPath)),
             new Promise((resolve, reject) => app.on('ready', resolve))
-        ]).then(obj => {
-            let config = obj[0];
-            thiz.hiddenWindow = new BrowserWindow({ width: 0, height: 0, show: false });
-            ipc.on('load', (event: any) => {
-                thiz.repos.load().then(config => {
-                    event.sender.send('data', config);
-                });
-            });
-            ipc.on('save', (event: any, data: Config) => {
-                thiz.repos.save(data);
-                thiz.watcher.watch(data.watchPath);
-            });
-            let appTray = new AppTray(app, thiz.uploader);
+                .then(() => thiz.initUI())
+        ]).then(() => thiz);
+    }
 
-            thiz.uploader.on('start', (title: string) => {
-                appTray.tray.displayBalloon({
-                    title: 'YouTube Auto Uploader',
-                    content: 'アップロードを開始しました: ' + title
-                });
-            });
-            thiz.uploader.on('failed', (e: any) => {
-                if (e.code == null || e.code !== 401) {
-                    console.error(e);
-                    return;
-                }
-                appTray.tray.displayBalloon({
-                    title: 'YouTube Auto Uploader',
-                    content: '認証情報を入力してください',
-                    clicked: () => {
-                        thiz.uploader.authenticate();
-                    }
-                });
-            });
-            thiz.uploader.on('complete', (title: string) => {
-                appTray.tray.displayBalloon({
-                    title: 'YouTube Auto Uploader',
-                    content: 'アップロードが完了しました: ' + title
-                });
-            });
-            thiz.watcher.watch(config.watchPath);
-            return thiz;
-        });
+    private initUI() {
+        this.hiddenWindow = new BrowserWindow({ width: 0, height: 0, show: false });
+        this.appTray = new AppTray(this.uploader);
     }
 }

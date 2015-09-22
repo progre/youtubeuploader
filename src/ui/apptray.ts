@@ -1,6 +1,7 @@
 import Uploader from '../service/uploader';
 import * as path from 'path';
-let TrayBase = require('tray');
+let app = require('app');
+let Tray = require('tray');
 let Menu = require('menu');
 let BrowserWindow = require('browser-window');
 
@@ -8,7 +9,7 @@ export default class AppTray {
     private optionWindow: any;
     public tray = createTray();
 
-    constructor(app: any, uploader: Uploader) {
+    constructor(uploader: Uploader) {
         this.tray.setContextMenu(Menu.buildFromTemplate([
             {
                 label: 'Option', click: () => this.showOption()
@@ -47,10 +48,10 @@ function createTray() {
     let resourcePath = path.normalize(__dirname + '/../res');
     let tray: any;
     if (process.platform === 'darwin') {
-        tray = new TrayBase(resourcePath + '/YouTube-social-icon_dark_16px@2x.png');
+        tray = new Tray(resourcePath + '/YouTube-social-icon_dark_16px@2x.png');
         tray.setPressedImage(resourcePath + '/YouTube-social-icon_light_16px@2x.png');
     } else {
-        tray = new TrayBase(resourcePath + '/YouTube-social-squircle_red_128px.png');
+        tray = new Tray(resourcePath + '/YouTube-social-squircle_red_128px.png');
     }
     tray.setToolTip('YouTube Auto Uploader');
     return tray;
