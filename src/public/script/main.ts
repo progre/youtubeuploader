@@ -19,3 +19,16 @@ window.addEventListener('unload', () => {
     };
     ipc.send('save', data);
 });
+
+$('#watchPath')[0].addEventListener('drop', (e: any) => {
+    let file = e.dataTransfer.files[0];
+    $('#watchPath').val(file.path);
+});
+
+window.addEventListener('dragover', e => {
+    e.preventDefault();
+});
+
+window.addEventListener('drop', e => {
+    e.preventDefault();
+});

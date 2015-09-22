@@ -10,6 +10,7 @@ export default class Watcher {
     }
 
     watch(path: string) {
+        path += '/*.*(flv|mkv|mov|mp4|ts)';
         if (path === this.path) {
             return;
         }

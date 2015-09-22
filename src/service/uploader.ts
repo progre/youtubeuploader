@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import {EventEmitter} from 'events';
 import * as log4js from 'log4js';
 import * as lockFile from 'lockfile';
+let bluebird = require('bluebird');
 let trash = require('trash');
 let BrowserWindow = require('browser-window');
 let youtubeAPI = require('youtube-api');
@@ -28,17 +29,27 @@ secret.clientSecret = sutalize(secret.clientSecret);
 export default class Uploader extends EventEmitter {
     private list: string[] = [];
     private working = false;
+    private authenticateShown = false;
 
     constructor(private repository: Repository) {
         super();
     }
 
     authenticate() {
+        if (this.authenticateShown) {
+            return;
+        }
+        this.authenticateShown = true;
         return <Promise<{}>>googleOAuth.getAccessToken(
             ['https://www.googleapis.com/auth/youtube.upload'],
             secret.clientId,
             secret.clientSecret)
+            .catch((e: Error) => {
+                this.authenticateShown = false;
+                throw e;
+            })
             .then((accessToken: AccessToken) => {
+                this.authenticateShown = false;
                 youtubeAPI.authenticate({
                     type: 'oauth',
                     token: accessToken.access_token
@@ -48,7 +59,9 @@ export default class Uploader extends EventEmitter {
     }
 
     queue(filePath: string) {
-        this.list.push(filePath);
+        if (this.list.indexOf(filePath) < 0) {
+            this.list.push(filePath);
+        }
         this.beginUpload();
     }
 
@@ -83,74 +96,63 @@ export default class Uploader extends EventEmitter {
 
     private upload(filePath: string) {
         log4js.getLogger().info('start uploading: ' + filePath);
+        let check = bluebird.promisify(lockFile.check);
+        let stat = bluebird.promisify(fs.stat);
         return Promise.all<any>([
-            new Promise<fs.Stats>((resolve, reject) => {
-                lockFile.check(filePath, (err, isLocked) => {
-                    if (err != null) {
-                        reject(err);
-                        return;
-                    }
-                    fs.stat(filePath, (err1, stats) => {
-                        if (err1 != null) {
-                            reject(err1);
-                            return;
-                        }
-                        resolve(stats);
-                    });
-                });
-            }),
+            check(filePath)
+                .then(() => stat(filePath)),
             this.repository.load()
-        ]).then(obj => {
-            let config: Config = obj[1];
-            let stats: fs.Stats = obj[0];
-            let t = title(config.name, stats);
-            super.emit('start', t);
-            return Promise.all([upload(filePath, config, stats), Promise.resolve(t)]);
-        }).then((obj: any[]) => new Promise((resolve, reject) => {
-            super.emit('complete', obj[1]);
-            log4js.getLogger().error('upload succeeded: ' + filePath);
-            trash([filePath], (err: any) => {
-                if (err != null) {
-                    reject(err);
-                    return;
-                }
-                log4js.getLogger().error('move to trash box: ' + filePath);
-                resolve();
+        ])
+            .then(obj => {
+                let stats: fs.Stats = obj[0];
+                let config: Config = obj[1];
+                let t = title(config.name, stats);
+                super.emit('start', filePath);
+                return Promise.all([
+                    upload(filePath, config, stats),
+                    Promise.resolve(t)
+                ]);
+            })
+            .then((obj: any[]) => {
+                super.emit('complete', obj[1]);
+                log4js.getLogger().info('upload succeeded: ' + filePath);
+                let trashPromise = bluebird.promisify(trash);
+                return trashPromise([filePath]);
+            })
+            .then(() => {
+                log4js.getLogger().info('move to trash box: ' + filePath);
+            })
+            .catch(e => {
+                log4js.getLogger().error('upload failed: ' + filePath);
+                return Promise.reject(e);
             });
-        })).catch(e => {
-            log4js.getLogger().error('upload failed: ' + filePath);
-            return Promise.reject(e);
-        });
     }
 }
 
 function upload(filePath: string, config: Config, stats: fs.Stats) {
-    return new Promise<any>((resolve, reject) => {
-        youtubeAPI.videos.insert(
-            {
-                part: 'snippet,status',
-                resource: {
-                    snippet: {
-                        title: title(config.name, stats),
-                        description: description(stats),
-                        tags: config.tags
-                    },
-                    status: {
-                        privacyStatus: 'private'
-                    }
+    let insert = bluebird.promisify(youtubeAPI.videos.insert);
+    return insert({ part: 'snippet' })
+        .catch((err: any) => {
+            if (err.code === 401) {
+                throw err;
+            }
+        })
+        .then(() => insert({
+            part: 'snippet,status',
+            resource: {
+                snippet: {
+                    title: title(config.name, stats),
+                    description: description(stats),
+                    tags: config.tags
                 },
-                media: {
-                    body: fs.createReadStream(filePath)
+                status: {
+                    privacyStatus: 'private'
                 }
             },
-            (err: any, data: any) => {
-                if (err != null) {
-                    reject(err);
-                    return;
-                }
-                resolve(data);
-            });
-    });
+            media: {
+                body: fs.createReadStream(filePath)
+            }
+        }));
 }
 
 function title(name: string, stats: fs.Stats) {
