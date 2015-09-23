@@ -26,7 +26,7 @@ before_deploy:
 deploy:
   provider: releases
   api_key:
-    secure: $API_KEY
+    secure: "l39rHK21QvnEjIaSdMfYZsMDNgKJWnCkrephfUlRrsp1fEf5FtAcpBos7xuQFkYHslh6tH5P0sAOuQcTUA5FwrpFr/lJXpObYO00EwTXUBmL1VK/j4DvVD9wzulIiwhOEzBX/gNuVJxIwuFJr/KKst1rkUgJ7gKcUbOE2VyDUer8iyhR2KwHOsnrzOEGNbKdvWhW0FBIxjHB2dwwXJSmX1oDe5ABiN5nB7NSAp5Wee6QcKmicOUp5t1hfO1HaW1LqsBtamCn06BzMF2nvrdy63d3K/NWYFskjR9c7udjbdPXV5Ac3Ow/sB1VqRok4s0z935m1wA3KHRsZlRpaBZDO8cNcwZv6+mnhcQlf3XKvcq0Ag0w/ptA+5SSIwoduFbcqCXC+m3No4CdlEcJKztSFXXCbclsRDHhjolrfSHhLbw9hzklJZrDQ4PJioxs/hsBFnfxkrlOPxgCPjz4ZwNZN5tNQ5jYd2fb2csvwSmop85RWLQjH5YEPoiD6nEz3ujAKmFrFrJiqOR1iJoDRoD0GkueMSA/bhwqXY/4Baoi+xRndmoi3nDh4r9Rf1cyK+ZDHz58PLxltgILWA6GbfsxzopfVpwoxcLpTIePFxkM0Zew347tmbr2apAe6Y7acBlVlBNb50cnT79i/wGKDBGwP9V2jYRKrLv2lK4CjKwGP1s="
   file:
     - $APP_NAME-win32-ia32.zip
     - $APP_NAME-win32-x64.zip
