@@ -1,6 +1,6 @@
 {
   "name": "youtube-auto-uploader",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Upload your video when the recording is finished.",
   "main": "lib/index.js",
   "scripts": {

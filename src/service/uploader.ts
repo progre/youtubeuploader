@@ -130,8 +130,9 @@ export default class Uploader extends EventEmitter {
 }
 
 function upload(filePath: string, config: Config, stats: fs.Stats) {
+    let update = bluebird.promisify(youtubeAPI.videos.update);
     let insert = bluebird.promisify(youtubeAPI.videos.insert);
-    return insert({ part: 'snippet' })
+    return update({ part: 'snippet' })
         .catch((err: any) => {
             if (err.code === 401) {
                 throw err;
