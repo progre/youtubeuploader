@@ -20,7 +20,7 @@ export default class Notifier {
         });
 
         uploader.on('complete', (title: string) => {
-            notify('アップロードが完了しました: ' + title, true);
+            notify('アップロードが完了しました: ' + title, false);
         });
     }
 }
