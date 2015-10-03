@@ -3,24 +3,52 @@ import * as path from 'path';
 let app = require('app');
 let Tray = require('tray');
 let Menu = require('menu');
+let MenuItem = require('menu-item');
 let BrowserWindow = require('browser-window');
 
 export default class AppTray {
     private optionWindow: any;
-    public tray = createTray();
+    tray = createTray();
 
-    constructor(uploader: Uploader) {
-        this.tray.setContextMenu(Menu.buildFromTemplate([
+    constructor(private uploader: Uploader) {
+        this.tray.setContextMenu(this.createContextMenu(null));
+        uploader.on('start', (fileName: string) => {
+            this.tray.setContextMenu(this.createContextMenu(fileName));
+        });
+
+        uploader.on('failed', (e: any) => {
+            this.tray.setContextMenu(this.createContextMenu(null));
+        });
+
+        uploader.on('complete', (title: string) => {
+            this.tray.setContextMenu(this.createContextMenu(null));
+        });
+    }
+
+    private createContextMenu(uploadingFileName: string) {
+        let items: any[] = [];
+        if (uploadingFileName != null) {
+            items = items.concat(
+                {
+                    label: '録画ファイルをアップロード中...',
+                    sublabel: uploadingFileName,
+                    enabled: false
+                },
+                {
+                    type: 'separator'
+                });
+        }
+        items = items.concat(
             {
                 label: 'Option', click: () => this.showOption()
             },
             {
-                label: 'Authenticate', click: () => uploader.authenticate()
+                label: 'Authenticate', click: () => this.uploader.authenticate()
             },
             {
                 label: 'Exit', click: () => app.quit()
-            }
-        ]));
+            });
+        return Menu.buildFromTemplate(items);
     }
 
     private showOption() {

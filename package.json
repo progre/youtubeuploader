@@ -1,6 +1,6 @@
 {
   "name": "youtube-auto-uploader",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Upload your video when the recording is finished.",
   "main": "lib/index.js",
   "scripts": {
@@ -39,8 +39,7 @@
     "stream-to-promise": "^1.0.4",
     "tsify": "^0.11.15",
     "typescript": "^1.6.2",
-    "vinyl-source-stream": "^1.1.0",
-    "youtube-api": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "bluebird": "^2.10.1",
@@ -52,6 +51,6 @@
     "node-uuid": "^1.4.3",
     "source-map-support": "^0.3.2",
     "trash": "^2.0.0",
-    "youtube-api": "^1.0.1"
+    "youtube-api": "^1.1.0"
   }
 }
