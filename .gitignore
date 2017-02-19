@@ -1,3 +1,4 @@
-dest/
-lib/
-node_modules/
+lib
+node_modules
+tmp
+typings

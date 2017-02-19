@@ -1,7 +1,4 @@
-/// <reference path="./typings.d.ts" />
-'use strict';
-require('source-map-support').install();
-require('crash-reporter').start();
+try { require("source-map-support").install(); } catch (e) { /* empty */ }
 import Application from './application';
 
-Application.new();
+Application.new().catch(e => console.error(e.stack || e));

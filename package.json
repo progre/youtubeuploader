@@ -1,57 +1,67 @@
 {
   "name": "youtube-auto-uploader",
-  "version": "0.3.2",
   "description": "Upload your video when the recording is finished.",
-  "main": "lib/index.js",
-  "scripts": {
-    "test": "gulp release-build-and-test"
+  "version": "0.3.2",
+  "author": "progre",
+  "bugs": {
+    "url": "https://github.com/progre/youtubeuploader/issues"
   },
+  "dependencies": {
+    "babel-polyfill": "^6.22.0",
+    "chokidar": "^1.0.5",
+    "electron-google-oauth": "^1.1.0",
+    "lockfile": "^1.0.1",
+    "node-notifier": "^4.2.3",
+    "node-uuid": "^1.4.3",
+    "trash": "^2.0.0",
+    "youtube-api": "^1.1.0"
+  },
+  "devDependencies": {
+    "@types/electron": "^1.4.31",
+    "@types/node": "^7.0.5",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-plugin-espower": "^2.3.2",
+    "babel-preset-babili": "0.0.11",
+    "babel-preset-env": "^1.1.8",
+    "copy-webpack-plugin": "^4.0.1",
+    "cross-env": "^3.1.4",
+    "electron": "^1.4.15",
+    "electron-packager": "^8.5.1",
+    "mocha": "^3.2.0",
+    "node-fetch": "^1.6.3",
+    "power-assert": "^1.4.2",
+    "source-map-support": "^0.4.11",
+    "thenify": "^3.2.1",
+    "ts-loader": "^2.0.0",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.5",
+    "typings": "^2.1.0",
+    "uglify-save-license": "^0.4.1",
+    "webpack": "^2.2.1",
+    "webpack-fail-plugin": "^1.0.5"
+  },
+  "files": [
+    "lib",
+    "LICENSE"
+  ],
+  "homepage": "https://github.com/progre/youtubeuploader#readme",
+  "keywords": [
+    "youtube"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/progre/youtubeuploader.git"
   },
-  "keywords": [
-    "youtube"
-  ],
-  "author": "progre",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/progre/youtubeuploader/issues"
-  },
-  "homepage": "https://github.com/progre/youtubeuploader",
-  "devDependencies": {
-    "browserify": "^11.1.0",
-    "del": "^2.0.2",
-    "gulp": "^3.9.0",
-    "gulp-babel": "^5.2.1",
-    "gulp-concat": "^2.6.0",
-    "gulp-espower": "^1.0.0",
-    "gulp-jade": "^1.1.0",
-    "gulp-mocha": "^2.1.3",
-    "gulp-plumber": "^1.0.1",
-    "gulp-sourcemaps": "^1.5.2",
-    "gulp-stylus": "^2.0.7",
-    "gulp-tslint": "^3.3.0-beta",
-    "gulp-tslint-stylish": "^1.0.4",
-    "gulp-typescript": "^2.8.3",
-    "merge-stream": "^1.0.0",
-    "release-it": "^2.3.1",
-    "run-sequence": "^1.1.3",
-    "stream-to-promise": "^1.0.4",
-    "tsify": "^0.11.15",
-    "typescript": "^1.6.2",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "dependencies": {
-    "bluebird": "^2.10.1",
-    "chokidar": "^1.0.5",
-    "electron-google-oauth": "^1.1.0",
-    "lockfile": "^1.0.1",
-    "log4js": "^0.6.26",
-    "node-notifier": "^4.2.3",
-    "node-uuid": "^1.4.3",
-    "source-map-support": "^0.3.2",
-    "trash": "^2.0.0",
-    "youtube-api": "^1.1.0"
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --progress",
+    "debug-build": "cross-env NODE_ENV=development webpack --progress",
+    "package": "node pack.js",
+    "postinstall": "typings install || echo Skipped.",
+    "start": "electron .",
+    "test": "mocha lib/test/",
+    "watch": "cross-env NODE_ENV=development webpack --progress --watch"
   }
 }
