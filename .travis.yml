@@ -17,8 +17,8 @@ deploy:
   api_key:
     secure: a34XWE2a9gJGRdL3Gc7ky8pNOSyhMBuEyVmWuiTyeCzXdkqKY4AWVgzggrXj6MYufCO9EB4NlcVYMPAZc+c5Krf61luxEsoUi2O23Ydn1BrTsnRKYS9l40BwazaEwULLeBTVEM4AX8yQR8Z/hJ9qmmYdhcoO/YrD7yjX79DTZrUsH4FembUWEmXbWVDKcMb14CMsfdsYGm/pglGK0GERq18kCN9wY7H9zMjoA3RLQs5Bvr5aiaSQ6C3kJSIe9ooSOBEEpcQzdUS8RtRDCbZMvcGkoW4ZjOPSIvgQp1s6ltKMkDGiBk17HtJ3O6pAbWZ6O8Dg8jvjIxAFcd6dc7JJvq9f7297ezvEAF+Q4fbYJ/Sl3xUMDgbn47L3c4O+9xj5H7KraEuAAgDQlhK9nkvxSv6Jt0F21lsEpJxrzXl9t1pfqJoOS+SpD9gshziI9mPxZ0yBwIwFuZt8jXEO4zxzpRYIraxjA6kKa4F716v+UN9pfxqJjA7eHqFl9YX5bLz6M2BT9Qx9rPk9EDL9o9zWCZmEp+2WS3KvCiiomU15kRng0UZqRFn7aWVWmmQo8pghfrqgNvgNCIit/ku+bqeDvp4yrhUgymGd1prjM5J9921Rj4qu5/sLdzXF/m7HQQ3WCoOg7rEXBV4VP50JjMgiL946ggPkwFxcs9o5tsNbJYc=
   file:
-    - tmp/youtubeuploader-win.zip
-    - tmp/youtubeuploader-mac.zip
+    - tmp/youtube-auto-uploader-win.zip
+    - tmp/youtube-auto-uploader-mac.zip
   on:
     tags: true
   prerelease: true
