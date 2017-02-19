@@ -3,7 +3,6 @@ import * as path from 'path';
 let app = require('electron').app;
 let Tray = require('electron').Tray;
 let Menu = require('electron').Menu;
-let MenuItem = require('electron').MenuItem;
 let BrowserWindow = require('electron').BrowserWindow;
 
 export default class AppTray {

@@ -3,7 +3,7 @@ import * as notifier from 'node-notifier';
 import Uploader from '../service/uploader';
 
 export default class Notifier {
-    constructor(private uploader: Uploader) {
+    constructor(uploader: Uploader) {
         uploader.on('start', (title: string) => {
             notify('アップロードを開始しました: ' + title, false);
         });

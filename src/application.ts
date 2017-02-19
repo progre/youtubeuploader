@@ -13,9 +13,7 @@ export default class Application {
     private repos = new Repository(app.getPath('userData') + '/config.json');
     private uploader = new Uploader(this.repos);
     private watcher = new Watcher(this.uploader);
-    /* tslint:disable:no-unused-variable */
     private notifier = new Notifier(this.uploader);
-    /* tslint:enable:no-unused-variable */
     private hiddenWindow: any;
     private appTray: AppTray;
 
@@ -29,6 +27,7 @@ export default class Application {
             this.repos.save(data);
             this.watcher.watch(data.watchPath);
         });
+        this.notifier;
     }
 
     static new() {
