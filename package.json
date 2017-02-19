@@ -1,7 +1,7 @@
 {
   "name": "youtube-auto-uploader",
   "description": "Upload your video when the recording is finished.",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "progre",
   "bugs": {
     "url": "https://github.com/progre/youtubeuploader/issues"
