@@ -21,3 +21,5 @@ deploy:
     - youtubeuploader-mac.zip
   on:
     tags: true
+  prerelease: true
+  skip_cleanup: true
