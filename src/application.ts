@@ -1,7 +1,7 @@
 import {v4 as uuid} from 'node-uuid';
-let app = require('app');
-let BrowserWindow = require('browser-window');
-let ipc = require('ipc');
+let app = require('electron').app;
+let BrowserWindow = require('electron').BrowserWindow;
+let ipc = require('electron').ipcMain;
 import Uploader from './service/uploader';
 import Repository from './service/repository';
 import {Config} from './service/interfaces';
@@ -52,5 +52,6 @@ export default class Application {
     private initUI() {
         this.hiddenWindow = new BrowserWindow({ width: 0, height: 0, show: false });
         this.appTray = new AppTray(this.uploader);
+        console.log(this.appTray);
     }
 }

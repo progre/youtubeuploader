@@ -1,10 +1,10 @@
 import Uploader from '../service/uploader';
 import * as path from 'path';
-let app = require('app');
-let Tray = require('tray');
-let Menu = require('menu');
-let MenuItem = require('menu-item');
-let BrowserWindow = require('browser-window');
+let app = require('electron').app;
+let Tray = require('electron').Tray;
+let Menu = require('electron').Menu;
+let MenuItem = require('electron').MenuItem;
+let BrowserWindow = require('electron').BrowserWindow;
 
 export default class AppTray {
     private optionWindow: any;
@@ -25,7 +25,7 @@ export default class AppTray {
         });
     }
 
-    private createContextMenu(uploadingFileName: string) {
+    private createContextMenu(uploadingFileName: string | null) {
         let items: any[] = [];
         if (uploadingFileName != null) {
             items = items.concat(
@@ -61,10 +61,10 @@ export default class AppTray {
             height: 300,
             resizable: false,
             show: false,
-            'skip-taskbar': true,
-            menu: null
+            skipTaskbar: true,
+            // menu: null
         });
-        this.optionWindow.loadUrl(path.normalize(`file://${__dirname}/../public/index.html`));
+        this.optionWindow.loadURL(path.normalize(`file://${__dirname}/../lib/public/index.html`)); // TODO: パス指定が雑
         this.optionWindow.on('closed', () => {
             this.optionWindow = null;
         });
@@ -73,7 +73,7 @@ export default class AppTray {
 }
 
 function createTray() {
-    let resourcePath = path.normalize(__dirname + '/../res');
+    let resourcePath = path.normalize(__dirname + '/../lib/res'); // TODO: パス指定が雑
     let tray: any;
     if (process.platform === 'darwin') {
         tray = new Tray(resourcePath + '/YouTube-social-icon_dark_16px@2x.png');

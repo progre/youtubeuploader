@@ -1,8 +1,33 @@
 <!DOCTYPE html>
-<meta charset="utf-8" />
-<title></title>
-<meta name="description" content="" />
-<meta name="author" content="" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="" />
+<meta charset="utf-8">
+<title>YouTube Auto Uploader</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style/bootstrap.min.css">
+<div class="container-fluid p-a">
+  <form>
+    <div class="form-group row">
+      <label class="col-xs-3 form-control-label text-right" for="watchPath">録画ファイルのパス:</label>
+      <div class="col-xs-9">
+        <input class="form-control" id="watchPath" type="text" placeholder="C:¥..." disabled>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-xs-3 form-control-label text-right" for="channelName">チャンネル名:</label>
+      <div class="col-xs-9">
+        <input class="form-control" id="channelName" type="text" placeholder="チャンネル名" required disabled>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-xs-3 form-control-label text-right" for="tags">タグ:</label>
+      <div class="col-xs-9">
+        <input class="form-control" id="tags" type="text" placeholder="A, B, C, ..." disabled>
+      </div>
+    </div>
+  </form>
+  <div class="text-right m-t-md">
+    <button class="btn btn-primary-outline" type="button" onClick="window.close();">閉じる</button>
+  </div>
+</div>
+<script>window.$ = window.jQuery = require("./script/jquery.min.js"); // Load jQuery.</script>
+<script src="script/bootstrap.min.js"></script>
 <script src="js/index.js"></script>

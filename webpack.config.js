@@ -94,6 +94,18 @@ module.exports = [
                 filename: "lib/[name].js",
                 libraryTarget: "commonjs2"
             },
+            plugins: common.plugins.concat([
+                new CopyWebpackPlugin(
+                    [{ from: "src/", to: "lib/" }],
+                    {
+                        ignore: [
+                            "public/",
+                            "test/",
+                            "*.ts",
+                            "*.tsx"
+                        ]
+                    })
+            ]),
             target: "electron-main"
         }
     )

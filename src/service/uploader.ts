@@ -4,7 +4,7 @@ import * as log4js from 'log4js';
 import * as lockFile from 'lockfile';
 let bluebird = require('bluebird');
 let trash = require('trash');
-let BrowserWindow = require('browser-window');
+let BrowserWindow = require('electron').BrowserWindow;
 let youtubeAPI = require('youtube-api');
 let googleOAuth = require('electron-google-oauth')(BrowserWindow);
 import Repository from './repository';

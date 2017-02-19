@@ -43,5 +43,6 @@ export default class Watcher {
                 log4js.getLogger().info('File changed: ' + path);
                 this.uploader.queue(path);
             });
+        log4js.getLogger().info('Watch start: ' + path);
     }
 }
