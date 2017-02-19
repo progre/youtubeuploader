@@ -12,7 +12,7 @@ export default class Watcher {
     }
 
     watch(path: string) {
-        path += '/*.*(flv|mkv|mov|mp4|ts)';
+        path += '/*.*(flv|mkv|mov|mp4|ts|wmv|asf)';
         if (path === this.path) {
             return;
         }

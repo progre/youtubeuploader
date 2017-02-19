@@ -51,6 +51,5 @@ export default class Application {
     private initUI() {
         this.hiddenWindow = new BrowserWindow({ width: 0, height: 0, show: false });
         this.appTray = new AppTray(this.uploader);
-        console.log(this.appTray);
     }
 }
