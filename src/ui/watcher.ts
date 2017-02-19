@@ -21,7 +21,17 @@ export default class Watcher {
             this.fsWatcher.close();
         }
         this.fsWatcher = chokidar.watch(path)
+            .on("add", path => {
+                if (process.platform !== 'win32') {
+                    return;
+                }
+                log4js.getLogger().info('File added: ' + path);
+                this.uploader.queue(path);
+            })
             .on('change', (path: string) => {
+                if (process.platform === 'win32') {
+                    return;
+                }
                 if (process.platform === 'darwin') {
                     const stat = bluebird.promisify(fs.stat);
                     let size: number;
