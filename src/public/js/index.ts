@@ -1,9 +1,7 @@
-declare let require: any;
-let erequire = require;
-let ipc = erequire('electron').ipcRenderer;
+import {ipcRenderer as ipc} from 'electron';
 import {Config} from '../../service/interfaces';
 
-ipc.on('data', (data: Config) => {
+ipc.on('data', (e, data) => {
     $('#channelName').val(data.name).removeAttr('disabled');
     $('#watchPath').val(data.watchPath).removeAttr('disabled');
     $('#tags').val(data.tags).removeAttr('disabled');

@@ -1,10 +1,10 @@
-import {v4 as uuid} from 'node-uuid';
+import { v4 as uuid } from 'node-uuid';
 let app = require('electron').app;
 let BrowserWindow = require('electron').BrowserWindow;
-let ipc = require('electron').ipcMain;
+import { ipcMain as ipc } from 'electron';
 import Uploader from './service/uploader';
 import Repository from './service/repository';
-import {Config} from './service/interfaces';
+import { Config } from './service/interfaces';
 import AppTray from './ui/apptray';
 import Watcher from './ui/watcher';
 import Notifier from './ui/notifier';
@@ -20,7 +20,7 @@ export default class Application {
     private appTray: AppTray;
 
     constructor() {
-        ipc.on('load', (event: any) => {
+        ipc.on('load', event => {
             this.repos.load().then(config => {
                 event.sender.send('data', config);
             });
